@@ -161,34 +161,8 @@ def main(args):
 			ctl = controller.compute_u(current_outputs, setpoints)
 		elif mode == "pid":
                         ctl = controller.compute_u(current_outputs, setpoints)
-        #x=np.array(sizes)
-        #y=np.array(size)
-        #plt.axhline(y=setpoint_compression, color='r', linestyle='--',label='goal')
-        #plt.plot(x,y,color='k',label='size per frame')
-        #plt.xlabel('frame')
-        #plt.ylabel('size')
-        #plt.title('Kp constant 0.5')
-        #plt.legend()
-        #plt.show()
-        #x=np.array(sizes)
-        #y=np.array(ssim)
-        #plt.axhline(y=setpoint_quality, color='r', linestyle='--',label='goal')
-        #plt.plot(x,y,color='k',label='ssim per frame')
-        #plt.xlabel('frame')
-        #plt.ylabel('ssim')
-        #plt.title('Kp constant 2')
-        #plt.legend()
-        #plt.show()
-	print ssim
-	print size
-	avg1 = sum(ssim) / len(ssim)
-	avg2 = sum(size) / len(size)
-	output1 = statistics.variance(ssim)
-	output2 = statistics.variance(size)
-	print avg1
-	print avg2
-	print output1
-	print output2
+        
+	
 	print " done"
 
 if __name__ == "__main__":
