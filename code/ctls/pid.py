@@ -47,17 +47,17 @@ class PidController:
                         if (calculate_quality<0 and calculate_quality>-100):# negative quality
                                 calculate_quality=calculate_quality*-1
                                 if (self.previous_quality1-calculate_quality>0): # reduce quality if positive
-                                        self.quality=self.previous_quality1-calculate_quality
-                                        self.previous_quality1=self.quality
+                                        if(self.previous_quality1-calculate_quality>0.5):
+                                                self.quality=self.previous_quality1-calculate_quality
+                                                self.previous_quality1=self.quality
                                 elif(self.previous_quality1-calculate_quality<0):# reduce quality if negative
                                         calculate_quality=calculate_quality-self.previous_quality1
-                                        self.quality=self.previous_quality1-calculate_quality
-                                        self.previous_quality1=self.quality
+                                        if (self.previous_quality1-calculate_quality>0.5):
+                                                self.quality=self.previous_quality1-calculate_quality
+                                                self.previous_quality1=self.quality
                         elif(calculate_quality>0 and calculate_quality<100):#positive quality
                                         self.quality= calculate_quality+ self.previous_quality1
                                         self.previous_quality1=self.quality
-                                        
- 
                         calculate_sharpness=self.ssim_error/self.max_error2 *self.max_ssim
                         if(calculate_sharpness<0 and calculate_sharpness> -1):# negative sharpness
                                 calculate_sharpness=calculate_sharpness*-1
@@ -66,7 +66,6 @@ class PidController:
                                         self.previous_sharpness=self.sharpen
                                 elif(self.previous_sharpness-calculate_sharpness<0):
                                         self.sharpen=calculate_sharpness-self.previous_sharpness
-                                        #self.sharpen=self.previous_sharpness-cacl_sharpness
                                         self.previous_sharpness=self.sharpen
                         elif(calculate_sharpness>0 and calculate_sharpness<1):# positive sharpness
                                 if(calculate_sharpness+self.previous_sharpness<5):
@@ -75,7 +74,6 @@ class PidController:
                                 elif(calculate_sharpness+self.previous_sharpness>5):
                                         self.sharpen=5
                                         self.previous_sharpness=self.sharpen
-                       
                         calculate_noise=self.ssim_error/self.max_error2 *self.max_ssim
                         if(calculate_noise<0 and calculate_noise> -1): # negative noise
                                 calculate_noise=calculate_noise*-1
@@ -84,7 +82,6 @@ class PidController:
                                         self.previous_noise=self.noise
                                 elif(self.previous_noise-calculate_noise<0):
                                         self.noise=calculate_noise-self.previous_noise
-                                        #self.noise=self.previous_noise-calculate_noise
                                         self.previous_noise=self.noise
                         elif(calculate_noise>0 and calculate_noise<1):# positive noise
                                 if(calculate_noise+self.previous_noise<5):
@@ -93,13 +90,15 @@ class PidController:
                                 elif(calculate_noise+self.previous_noise>5):
                                         self.noise=5
                                         self.previous_noise=self.noise
-                        
                                
 		self.ctl = np.matrix([[self.quality], [self.sharpen], [self.noise]])
-		return self.ctl                               
+		return self.ctl
+                 
+                        
+                                
                 
 	def compute_ssim(self,current_outputs, setpoints):
-                kp_ssim=1
+                kp_ssim=0.5
                 ki_ssim=0
                 kd_ssim=0                                       
                 self.current_time = times.time()
@@ -114,7 +113,7 @@ class PidController:
                 return output
 
         def compute_size(self,current_outputs,setpoints):
-                kp_size=0.5
+                kp_size=0.52
                 ki_size=0
                 kd_size=0
                 self.current_time2=times.time()
@@ -131,4 +130,3 @@ class PidController:
                 self.prior_integral_size=integral
                 return output
                 
- 
